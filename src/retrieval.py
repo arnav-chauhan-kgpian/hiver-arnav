@@ -112,7 +112,7 @@ class RetrievalEngine:
             raise ValueError(f"No records found in {self.train_path}.")
         return records
 
-    def _embed(self, texts: list[str], desc: str) -> np.ndarray:
+    def _embed(self, texts: list[str]) -> np.ndarray:
         """Embed and L2-normalize a list of texts (with a progress bar)."""
         embeddings = self.model.encode(
             texts,
@@ -132,7 +132,7 @@ class RetrievalEngine:
             return np.load(self.embeddings_cache).astype("float32")
 
         texts = [r["customer_email"] for r in tqdm(self.records, desc="Preparing texts")]
-        embeddings = self._embed(texts, desc="Embedding train emails")
+        embeddings = self._embed(texts)
         self.embeddings_cache.parent.mkdir(parents=True, exist_ok=True)
         np.save(self.embeddings_cache, embeddings)
         print(f"Saved embeddings cache: {self.embeddings_cache}")
@@ -212,7 +212,7 @@ class RetrievalEngine:
         if not self.records:
             self.records = self._load_records()
 
-        query_vec = self._embed([query], desc="Embedding query")
+        query_vec = self._embed([query])
         k = min(k, len(self.records))
         scores, indices = self.index.search(query_vec, k)
 

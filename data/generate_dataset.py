@@ -183,15 +183,15 @@ def _shipping_delay(ctx: dict[str, Any], rng: random.Random) -> tuple[str, str, 
 
 def _password_reset(ctx: dict[str, Any], rng: random.Random) -> tuple[str, str, str]:
     email = (
-        f"I'm trying to log in but my password isn't working. "
-        f"I clicked the 'forgot password' link but the reset email never arrived, even after checking spam. "
-        f"Can you help me reset it so I can get back into my account?"
+        "I'm trying to log in but my password isn't working. "
+        "I clicked the 'forgot password' link but the reset email never arrived, even after checking spam. "
+        "Can you help me reset it so I can get back into my account?"
     )
     reply = (
-        f"Happy to help you get back in. I've just triggered a fresh password-reset email to the "
-        f"address on your account, so please check your inbox (and spam) in the next few minutes. "
-        f"The link is valid for 60 minutes. If it still doesn't arrive, reply here and I'll verify "
-        f"your identity and reset it manually."
+        "Happy to help you get back in. I've just triggered a fresh password-reset email to the "
+        "address on your account, so please check your inbox (and spam) in the next few minutes. "
+        "The link is valid for 60 minutes. If it still doesn't arrive, reply here and I'll verify "
+        "your identity and reset it manually."
     )
     return email, reply, "low"
 
@@ -269,29 +269,29 @@ def _bug_report(ctx: dict[str, Any], rng: random.Random) -> tuple[str, str, str]
 
 def _account_access(ctx: dict[str, Any], rng: random.Random) -> tuple[str, str, str]:
     email = (
-        f"I'm locked out of my account. It says my access has been suspended, but I haven't done "
-        f"anything unusual. I really need to get back in today because I have work depending on it. "
-        f"Can you tell me why this happened and help me restore access?"
+        "I'm locked out of my account. It says my access has been suspended, but I haven't done "
+        "anything unusual. I really need to get back in today because I have work depending on it. "
+        "Can you tell me why this happened and help me restore access?"
     )
     reply = (
-        f"I understand how stressful being locked out is, and I'm here to help. Our system flagged "
-        f"an unusual sign-in and temporarily suspended access as a precaution. I've verified your "
-        f"account looks secure and lifted the suspension, so you should be able to log in now. "
-        f"I'd also recommend enabling two-factor authentication for extra protection."
+        "I understand how stressful being locked out is, and I'm here to help. Our system flagged "
+        "an unusual sign-in and temporarily suspended access as a precaution. I've verified your "
+        "account looks secure and lifted the suspension, so you should be able to log in now. "
+        "I'd also recommend enabling two-factor authentication for extra protection."
     )
     return email, reply, "high"
 
 
 def _invoice_request(ctx: dict[str, Any], rng: random.Random) -> tuple[str, str, str]:
     email = (
-        f"Could you please send me a copy of my latest invoice? "
-        f"I need it for my expense report and I can't find it in my email. "
-        f"A PDF would be ideal. Thanks in advance."
+        "Could you please send me a copy of my latest invoice? "
+        "I need it for my expense report and I can't find it in my email. "
+        "A PDF would be ideal. Thanks in advance."
     )
     reply = (
-        f"Absolutely. I've generated a PDF copy of your most recent invoice and emailed it to the "
-        f"address on your account. You can also download past invoices anytime from the Billing "
-        f"section of your account settings. Let me know if you need it in a different format."
+        "Absolutely. I've generated a PDF copy of your most recent invoice and emailed it to the "
+        "address on your account. You can also download past invoices anytime from the Billing "
+        "section of your account settings. Let me know if you need it in a different format."
     )
     return email, reply, "low"
 

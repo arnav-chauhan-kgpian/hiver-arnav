@@ -97,9 +97,18 @@ _WEEKDAY_RE = re.compile(
     r"\b(monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b",
     re.IGNORECASE,
 )
-_MONTH_RE = re.compile(
-    r"\b(january|february|march|april|may|june|july|august|september|"
-    r"october|november|december)\b",
+# Match a month name only when it is part of an actual date expression
+# (month + day/year, or day + month). Bare month words are skipped so that
+# common non-date usages — the modal verb "may", the verb "march", etc. —
+# do not trigger a spurious "unsupported date" penalty.
+_MONTH_NAMES = (
+    r"(?:january|february|march|april|may|june|july|august|september|"
+    r"october|november|december)"
+)
+_MONTH_DATE_RE = re.compile(
+    rf"\b(?:{_MONTH_NAMES}\s+\d{{1,2}}(?:st|nd|rd|th)?"  # "March 5", "May 3rd"
+    rf"|\d{{1,2}}(?:st|nd|rd|th)?\s+{_MONTH_NAMES}"       # "5 March", "3rd May"
+    rf"|{_MONTH_NAMES}\s+\d{{4}})\b",                     # "March 2024"
     re.IGNORECASE,
 )
 _DATE_RE = re.compile(r"\b\d{1,2}/\d{1,2}(?:/\d{2,4})?\b")
@@ -369,20 +378,24 @@ class EmailResponseEvaluator:
                 f"(-{PENALTY_EXCESSIVE_LENGTH})."
             )
 
-        # Unsupported monetary / refund claim.
+        # Unsupported monetary / refund claim: any dollar amount in the reply
+        # that does not appear in the customer email or reference reply.
+        supported_nospace = supported.replace(" ", "")
         gen_amounts = set(_MONEY_RE.findall(reply))
-        unsupported_amounts = [a for a in gen_amounts if a.replace(" ", "") not in supported.replace(" ", "")]
-        if unsupported_amounts and ("refund" in reply_lower or "charge" in reply_lower or gen_amounts):
+        unsupported_amounts = [
+            a for a in gen_amounts if a.replace(" ", "") not in supported_nospace
+        ]
+        if unsupported_amounts:
             adjustment -= PENALTY_UNSUPPORTED_REFUND
             notes.append(
                 f"Mentions monetary amount(s) {unsupported_amounts} not supported by "
                 f"the email/reference (-{PENALTY_UNSUPPORTED_REFUND})."
             )
 
-        # Unsupported concrete date (weekday / month name / MM/DD).
+        # Unsupported concrete date (weekday / real month-date / MM/DD).
         gen_dates = (
             _WEEKDAY_RE.findall(reply)
-            + _MONTH_RE.findall(reply)
+            + _MONTH_DATE_RE.findall(reply)
             + _DATE_RE.findall(reply)
         )
         unsupported_dates = [d for d in gen_dates if str(d).lower() not in supported]
