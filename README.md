@@ -1,5 +1,7 @@
 # AI Email Suggested Response System
 
+**Live demo:** https://hiver-arnav.streamlit.app/
+
 This project generates suggested replies to customer-support emails using
 retrieval-augmented generation (RAG) and scores each reply with a composite
 evaluation framework. An incoming email is embedded, matched against a corpus of
@@ -360,6 +362,9 @@ for first launch..." spinner) before building the retrieval index — no manual
 fails, the app shows an error instead of crashing.
 
 ### Deploying on Streamlit Community Cloud
+
+This app is deployed at **https://hiver-arnav.streamlit.app/**. To deploy your
+own instance:
 
 1. Push this repository to GitHub.
 2. On [share.streamlit.io](https://share.streamlit.io), create a new app pointing
